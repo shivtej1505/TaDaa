@@ -20,14 +20,19 @@ class App extends React.Component {
     render() {
         let todo;
         let { store } = this.props;
-        let items = store.getState();
+        let items = store.getState() || [] ;
         return (
         <div>
             <h2>TaDaa - Simple ToDo</h2>
             <div className="listApp">
+                { items.length > 0 &&
                 <ul className="list-group">
-                { items.map((value, index) => <li key={index}>{value}</li>) }
+                    { items.map((value, index) => <li key={index}>{value}</li>) }
                 </ul>
+                }
+                { items.length === 0 &&
+                    <p>Add new todo</p>
+                }
             </div>
             <div className="footerApp">
                 <input type="text" name="todoInput" defaultValue="" placeholder="Write your task here" ref={node => {todo = node;}} />
