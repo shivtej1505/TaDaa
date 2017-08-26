@@ -2,6 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux'
 import logger from 'redux-logger'
+import { todoReducer } from './reducers.jsx'
+import { ContentApp } from './ContentApp.jsx'
+import { FooterApp } from './FooterApp.jsx';
 
 class App extends React.Component {
     addTodo(value) {
@@ -18,49 +21,16 @@ class App extends React.Component {
     }
 
     render() {
-        let todo;
         let { store } = this.props;
         let items = store.getState() || [] ;
         return (
         <div>
             <h2>TaDaa - Simple ToDo</h2>
-            <div className="listApp">
-                { items.length > 0 &&
-                <ul className="list-group">
-                    { items.map((value, index) => <li key={index}>{value}</li>) }
-                </ul>
-                }
-                { items.length === 0 &&
-                    <p>Add new todo</p>
-                }
-            </div>
-            <div className="footerApp">
-                <input type="text" name="todoInput" defaultValue="" placeholder="Write your task here" ref={node => {todo = node;}} />
-                <button className="btn add-btn" onClick={() => {this.addTodo(todo.value); todo.value = "";}}>Add</button>
-                <button className="btn clear-btn" onClick={() => this.clearTodos()}>Clear</button>
-            </div>
+            <ContentApp items={items}/>
+            <FooterApp addTodo={this.addTodo.bind(this)} clearTodos={this.clearTodos.bind(this)}/>
         </div>
     )}
 }
-
-const todoReducer = (state = [], action) => {
-    console.log(state, action);
-    let newState = Object.assign([], state);
-    switch (action.type) {
-        case 'ADD_TODO':
-            newState.push(action.value);
-            break;
-        case 'CLEAR_TODOS':
-            newState = [];
-            break;
-        case 'LOAD_INITIAL_TODOS':
-            newState = action.todos;
-            break;
-        default:
-            break;
-    }
-    return newState;
-};
 
 const store = createStore(todoReducer, applyMiddleware(logger));
 

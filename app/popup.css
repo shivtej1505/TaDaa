@@ -14,7 +14,7 @@ body {
     border: none;
     padding: 5px;
     margin-left: 5px;
-
+    outline: none;
 }
 
 .add-btn {
